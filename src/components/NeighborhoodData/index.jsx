@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { formatPtBrNumber } from "./../../utils/formatters";
-import { calculatePercDiff } from "../../utils/functions";
+import { LineChart } from "@mui/x-charts/LineChart";
+import { useMemo } from "react";
 import "./styles.scss";
 
 function NeighborhoodData({
@@ -10,8 +10,17 @@ function NeighborhoodData({
   },
   closePopUpCallback,
 }) {
+  const dataSet = useMemo(() => {
+    return arrayPopulation?.map((item) => {
+      return {
+        ano: item.ano,
+        populacao: item.populacao,
+      };
+    });
+  }, [arrayPopulation]);
+
   return arrayPopulation?.length > 0 ? (
-    <div className="container">
+    <div className="container" data-testid="neighborhoodData">
       <span className="close" onClick={closePopUpCallback} />
       <h3 className="name">{name}</h3>
 
@@ -24,22 +33,19 @@ function NeighborhoodData({
         </p>
       </div>
 
-      <ul className="list">
-        {arrayPopulation?.map((item, index) => (
-          <li key={index} className="item-list">
-            <strong>{item?.ano}</strong>
-            <p>
-              População: {formatPtBrNumber(item?.populacao)}
-              {index !== 0
-                ? calculatePercDiff(
-                    arrayPopulation[index - 1]?.populacao,
-                    item?.populacao
-                  )
-                : null}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <h4 className="titleChart">População/Ano</h4>
+
+      <LineChart
+        xAxis={[{ scaleType: "point", dataKey: "ano", label: "Ano" }]}
+        series={[
+          {
+            dataKey: "populacao",
+          },
+        ]}
+        dataset={dataSet}
+        height={300}
+        margin={{ right: 20 }}
+      />
     </div>
   ) : null;
 }

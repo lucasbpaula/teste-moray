@@ -11,13 +11,13 @@ export function useCustomMapContainerHook() {
   });
 
   const fetchNeighborhoodData = useCallback(async () => {
-    const neighborData = await axios("/bairros-geojson");
+    const neighborData = await axios.get("/bairros-geojson");
 
     setGeojson(neighborData?.data);
   }, []);
 
   const fetchPopulationData = useCallback(async () => {
-    const populationData = await axios("/populacao");
+    const populationData = await axios.get("/populacao");
 
     setNeighborhoodPopulation(populationData?.data);
   }, []);
@@ -27,7 +27,7 @@ export function useCustomMapContainerHook() {
   };
 
   const handleClick = ({ properties }) => {
-    const filteredPopulation = neighborhoodPopulation.filter(
+    const filteredPopulation = neighborhoodPopulation?.filter(
       (item) => item?.id_geometria === properties?.id
     );
 
@@ -63,7 +63,7 @@ export function useCustomMapContainerHook() {
   useEffect(() => {
     fetchNeighborhoodData();
     fetchPopulationData();
-  }, []);
+  }, [fetchNeighborhoodData, fetchPopulationData]);
 
   return {
     closePopUpCallback,

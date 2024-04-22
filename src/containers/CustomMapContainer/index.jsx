@@ -17,7 +17,7 @@ function CustomMapContainer() {
   } = useCustomMapContainerHook();
 
   return (
-    <>
+    <div data-testid="customMapContainer">
       <MapContainer
         style={{ height: "100vh" }}
         bounds={[
@@ -56,7 +56,7 @@ function CustomMapContainer() {
           />
         ) : null}
       </MapContainer>
-    </>
+    </div>
   );
 }
 
